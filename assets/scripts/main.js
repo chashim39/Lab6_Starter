@@ -25,9 +25,17 @@ function getRecipesFromStorage() {
   //           header. It is possible in only a single line, but should
   //           be no more than a few lines.
   let recipeList = localStorage.getItem("recipes").split("},{");
-  recipeList[0] = JSON.parse(recipeList[0].slice(1) + '}');
-  recipeList[1] = JSON.parse('{' + recipeList[1] + '}');
-  recipeList[2] = JSON.parse('{' + recipeList[2].substring(0,recipeList[2].length-1));
+  for (let j = 0; j < recipeList.length; j++) {
+    if (j == 0) {
+      recipeList[j] = JSON.parse(recipeList[j].slice(1) + '}');
+    }
+    else if (j == (recipeList.length - 1)) {
+      recipeList[j] = JSON.parse('{' + recipeList[j].substring(0,recipeList[j].length-1));
+    }
+    else {
+      recipeList[j] = JSON.parse('{' + recipeList[j] + '}');
+    }
+  }
   return recipeList;
 }
 
@@ -62,6 +70,7 @@ function saveRecipesToStorage(recipes) {
   // B1. TODO - Complete the functionality as described in this function
   //            header. It is possible in only a single line, but should
   //            be no more than a few lines.
+  localStorage.setItem('recipes', JSON.stringify(recipes));
 }
 
 /**
@@ -92,5 +101,62 @@ function initFormHandler() {
   // Steps B12 & B13 will occur inside the event listener from step B11
   // B12. TODO - Clear the local storage
   // B13. TODO - Delete the contents of <main>
+
+  let formElement = document.querySelector("form");
+  let buttonList = document.querySelectorAll("button");
+  let saveButton = buttonList[0];
+  let clearButton = buttonList[1];
+  saveButton.addEventListener('click', () => {
+    // let ratingRadioGroup =  document.getElementsByName("rating");
+    // let checkedRating = Array.from(ratingRadioGroup).find(
+    //   (radio) => radio.checked
+    // );
+    // console.log(checkedRating.value);
+    
+    // const formData = {
+    //   "imgSrc": document.getElementById("imgSrc").value,
+    //   "imgAlt": document.getElementById("imgAlt").value,
+    //   "titleLnk": document.getElementById("titleLnk").value,
+    //   "titleTxt": document.getElementById("titleTxt").value,
+    //   "organization": document.getElementById("organization").value,
+    //   "rating": checkedRating.value,
+    //   "numRatings": document.getElementById("numRatings").value,
+    //   "lengthTime": document.getElementById("lengthTime").value,
+    //   "ingredients": document.getElementById("ingredients").value
+    // }
+    
+    // let recipeList = localStorage.getItem("recipes").split("},{");
+    // for (let j = 0; j < recipeList.length; j++) {
+    //   if (j == 0) {
+    //     recipeList[j] = JSON.parse(recipeList[j].slice(1) + '}');
+    //   }
+    //   else if (j == (recipeList.length - 1)) {
+    //     recipeList[j] = JSON.parse('{' + recipeList[j].substring(0,recipeList[j].length-1));
+    //   }
+    //   else {
+    //     recipeList[j] = JSON.parse('{' + recipeList[j] + '}');
+    //   }
+    // }
+    // console.log(recipeList);
+    // recipeList.push(formData);
+    // console.log(recipeList);
+    // localStorage.setItem('recipes', JSON.stringify(formData));
+    // let newRecipes = localStorage.getItem("recipes");
+    // newRecipes.push(formData);
+    // console.log(newRecipes);
+    // localStorage.setItem('recipes', newRecipes);
+    
+    // let newRecipeElement = document.createElement('recipe-card');
+    // newRecipeElement.data = JSON.stringify(formData);
+    // mainElement.append(newRecipeElement);
+  });
+
+  clearButton.addEventListener('click', () => {
+    let articleList = document.querySelectorAll("article");
+    for (let k = 0; k < articleList.length; k++) {
+      articleList[k].remove();
+    }
+    localStorage.clear();
+  })
 
 }
